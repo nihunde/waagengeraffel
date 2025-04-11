@@ -6,11 +6,11 @@
 #include <Adafruit_NeoPixel.h>
 #include <SoftwareSerial.h>
 #include <SoftwareSerial.h>
-SoftwareSerial softSerial(2, /*tx =*/3);
+SoftwareSerial softSerial(2, /*nee  =*/3);
 #define LEDPIN        8
-#define MAXWEIGHT 100
-#define NUMPIXELS 30
-
+#define MAXWEIGHT 150
+#define NUMPIXELS 64
+#define STEPS 32
 char scale_serial[200];
 
 Adafruit_NeoPixel pixels(NUMPIXELS, LEDPIN, NEO_GRB + NEO_KHZ800);
@@ -46,22 +46,18 @@ void loop() {
       }
 
     pixels.clear();
-    pixels.setBrightness(50);
-    for(int i=0; i<NUMPIXELS; i++) {
+    pixels.setBrightness(250);
+    for(int i=0; i<STEPS; i++) {
       if (i < map((long) weight, 0, MAXWEIGHT, 1, NUMPIXELS) ) {
-          if (i < 10) {
-              pixels.setPixelColor(i, pixels.Color(250, 0, 0));
-          } else if( i < 20 ) {
-              pixels.setPixelColor(i, pixels.Color(150, 150, 0));
+          if (i < 9) {
+              pixels.setPixelColor(NUMPIXELS-(2*i), pixels.Color(250, 0, 0));
+          } else if( i < 18 ) {
+              pixels.setPixelColor(NUMPIXELS-(2*i), pixels.Color(150, 150, 0));
           } else {
-                pixels.setPixelColor(i, pixels.Color(0, 150, 0));
+                pixels.setPixelColor(NUMPIXELS-(2*i), pixels.Color(0, 150, 0));
             }
       }
-
-//
-//          // Send the updated pixel colors to the hardware.
-//
-//        delay(DELAYVAL); // Pause before next pass through loop
     }
     pixels.show();
-}
+    delay(5);
+ }
